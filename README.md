@@ -1,6 +1,6 @@
 color-picker.js
 ====
-* https://yoggy.github.io/color_picker.js
+* https://yoggy.github.io/color_picker.js/
 
 ![img.gif](img.gif)
 
