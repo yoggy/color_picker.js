@@ -2,7 +2,7 @@ color-picker.js
 ====
 * https://yoggy.github.io/color_picker.js/
 
-![img01.gif](img01.gif)
+![img02.gif](img02.gif)
 
 Copyright and license
 ----
