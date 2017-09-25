@@ -12,14 +12,16 @@
 var canvas;
 var img;
 var color_str_div;
+var color_sample_div;
 
 function setup() {
 	canvas = createCanvas(400, 400);
     canvas.parent("sketch-holder");
     canvas.drop(onDropFile);
     
-    color_str_div = select("#color_str");
-
+    color_str_div = select("#color_str").elt;
+    color_sample_div = select("#color_sample").elt;
+    
     frameRate(30);
 }
 
@@ -36,9 +38,17 @@ function draw() {
         text('Drag & Drop an image file...', width/2, height/2);
     }
 
-    if (0 <= mouseX && mouseX < width && 0 <= mouseY && mouseY < height) {
+    if (isInner()) {        
         msg = getColorMessage();
-        color_str_div.elt.innerText = msg;
+        color_str_div.innerText = msg;
+        color_sample.style.backgroundColor = getColorHex();
+    }
+}
+
+function mousePressed() {
+    if (isInner() == true) {
+        var input = select("#color_copy_area");
+        input.elt.value = getColorMessage();
     }
 }
 
@@ -49,24 +59,45 @@ function onDropFile(file) {
     }
 }
 
-function getColorMessage() {
+function isInner() {
+    if (0 <= mouseX && mouseX < width && 0 <= mouseY && mouseY < height) return true;
+    return false;
+}
+
+function getColor() {
     var c = get(mouseX, mouseY);
     var r = c[0];
     var g = c[1];
     var b = c[2];
 
-    color_str = "#" 
-        + ("0" + r.toString(16)).slice(-2) 
-        + ("0" + g.toString(16)).slice(-2) 
-        + ("0" + b.toString(16)).slice(-2);
+    return [r, g, b];
+}
 
-    var msg = "(R,G,B)=(" + r + ", " + g + ", " + b + ") " + color_str;
+function getColor() {
+    var c = get(mouseX, mouseY); // <- p5.js function
+    return {r: c[0],g: c[1],b: c[2]}
+}
+
+function getColorHex() {
+    var r = getColor().r;
+    var g = getColor().g;
+    var b = getColor().b;
+
+    color_hex = "#" 
+    + ("0" + r.toString(16)).slice(-2) 
+    + ("0" + g.toString(16)).slice(-2) 
+    + ("0" + b.toString(16)).slice(-2);
+
+    return color_hex;
+}
+
+function getColorMessage() {
+    var r = getColor().r;
+    var g = getColor().g;
+    var b = getColor().b;
+
+    var msg = "(R,G,B)=(" + r + ", " + g + ", " + b + ") " + getColorHex();
 
     return msg;
 }
 
-function mousePressed() {
-    var msg = getColorMessage();
-    var input = select("#color_copy_area");
-    input.elt.value = msg;
-}
